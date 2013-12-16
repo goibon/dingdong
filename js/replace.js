@@ -9,8 +9,6 @@ chrome.storage.sync.get("status", function(result){
 					replace(node, regularExpressions);
 				}
 			});
-
-			
 		});
 	}
 });
@@ -22,8 +20,15 @@ function replace(node, regularExpressions) {
 }
 
 function convertToRegExp(items, targetArray){
+	regExRegExp = new RegExp("\^\/.*\/\$","i");
 	for (var item in items){
-		if (targetArray.indexOf(item) == -1){
+		if (regExRegExp.test(item)){
+			slashes = new RegExp("\/", "g");
+			item = item.replace(slashes, "");
+			item = new RegExp(item, "i");
+			targetArray.push(item);
+		}
+		else if (targetArray.indexOf(item) == -1){
 			targetArray.push(new RegExp(item, "i"));
 		}
 	}

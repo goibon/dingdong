@@ -12,6 +12,8 @@ function save_options() {
   }, 750);
 }
 
+var specialCharacters = ["*","\\", ".", "+", "^", "$", "?"];
+
 document.addEventListener('DOMContentLoaded', function(){chrome.storage.sync.get(null,function(items){restoreOptions(items);});});
 
 function restoreOptions(items) {
@@ -30,13 +32,15 @@ function addSearchWord(){
   }
   $input = $input.toLowerCase();
   var dupeBool = false;
-  var duplicateRegExPattern = new RegExp(("^"+$input+"$"),"i");
+  if (specialCharacters.indexOf($input) != -1){ // If input is special character.
+    $input = "\\"+$input;
+  }
   $("option").each(function(key,value){
-    if(duplicateRegExPattern.test(value.text)){
-      console.log(value.text+" is already in the list.");
+    if ($input == value.text){
       dupeBool = true;
     }
   });
+  
   if (!dupeBool){
       $("#searchWordSelectMultiple").append($("<option></option>").attr("id",$input).text($input));
       storeOptions();
