@@ -3,7 +3,7 @@
   "name": "Ding Dong Substitutions",
   "short_name": "Ding Dong",
    "description": "A chrome extension that inserts the words \"Ding Dong\" instead of others.",
-   "version": "1.0",
+   "version": "1.1",
 
    "background" : { "scripts": ["js/background.js"],
    "persistent" : false },
@@ -23,6 +23,8 @@
       "all_frames": true,
       "run_at": "document_end"
    } ],
+
+   "options_page" : "options.html",
 
    "icons": {"16": "images/dingdong-16.png", 
              "48": "images/dingdong-48.png", 

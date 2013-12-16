@@ -1,15 +1,27 @@
 chrome.storage.sync.get("status", function(result){
-	console.log("result: "+result["status"]);
 	if (result["status"] == "enabled"){
 		$(function() {
-			var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
-			while (node = iterator.nextNode()) {
-				replace(node);
-			}
+			var regularExpressions = [];
+			chrome.storage.sync.get(null,function(items){
+				for (var item in items){
+					if (regularExpressions.indexOf(item) == -1){
+						regularExpressions.push(new RegExp(item, "i"));
+					}
+					
+				}
+				var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
+				while (node = iterator.nextNode()) {
+					replace(node, regularExpressions);
+				}
+			});
+
+			
 		});
 	}
 });
 
-function replace(node) {
-	node.data = node.data.replace(/(awesome)/i, 'Ding Dong');
+function replace(node, regularExpressions) {
+	for (var expression in regularExpressions){
+		node.data = node.data.replace(regularExpressions[expression], 'Ding Dong');
+	}
 }
