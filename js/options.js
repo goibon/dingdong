@@ -48,10 +48,11 @@ function addSearchWord(){
 }
 
 function storeOptions(){
-  var searchWordObject = new Object(); // storageArea.set() method takes an object that contains all the items to be stored. This Object contains those.
+  var words = new Object(); // storageArea.set() method takes an object that contains all the items to be stored. This Object contains those.
+  
   $("option").each(function(key,value){ // .each(index, element)
-    searchWordObject[value.id] = value.text;
-    chrome.storage.sync.set(searchWordObject, function(){console.log("Stored: "+value.text);});
+    words[value.id] = value.text;
+    chrome.storage.sync.set(words, function(){console.log("Stored: "+value.text);});
   });
 }
 
