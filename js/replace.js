@@ -15,8 +15,9 @@ chrome.storage.sync.get("status", function(result){
 function replace() {
   $(function() {
     var regularExpressions = [];
-  	chrome.storage.sync.get(null,function(items){
-  		convertToRegExp(items, regularExpressions);
+  	chrome.storage.sync.get("words",function(items){
+      var words = items.words;
+  		convertToRegExp(words, regularExpressions);
   		var iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT);
   		while (node = iterator.nextNode()) {
   			for (var expression in regularExpressions){
@@ -27,17 +28,17 @@ function replace() {
   });
 }
 
-function convertToRegExp(items, targetArray){
+function convertToRegExp(words, targetArray){
 	regExRegExp = new RegExp("\^\/.*\/\$","i");
-	for (var item in items){
-		if (regExRegExp.test(item)){
+	for (var word in words){
+		if (regExRegExp.test(word)){
 			slashes = new RegExp("\/", "g");
-			item = item.replace(slashes, "");
-			item = new RegExp(item, "i");
-			targetArray.push(item);
+			word = word.replace(slashes, "");
+			word = new RegExp(word, "i");
+			targetArray.push(word);
 		}
-		else if (targetArray.indexOf(item) == -1){
-			targetArray.push(new RegExp(item, "i"));
+		else if (targetArray.indexOf(word) == -1){
+			targetArray.push(new RegExp(word, "i"));
 		}
 	}
 }

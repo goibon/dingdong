@@ -14,12 +14,14 @@ function save_options() {
 
 var specialCharacters = ["*","\\", ".", "+", "^", "$", "?"];
 
-document.addEventListener('DOMContentLoaded', function(){chrome.storage.sync.get(null,function(items){restoreOptions(items);});});
+document.addEventListener('DOMContentLoaded', function(){chrome.storage.sync.get('words',function(items){restoreOptions(items);});});
 
 function restoreOptions(items) {
-  for (var searchWord in items){
-    $("#searchWordSelectMultiple").append($("<option></option>").attr("id",searchWord).text(searchWord));
-  }
+  var words = items.words;
+    for (var key in words) {
+        console.log('Replacing "' + key + '" with "' + words[key] + '"...'); 
+        $("#searchWordSelectMultiple").append($("<option></option>").attr("id", key).text(key));
+    }
 }
 
 $("#addButton").click(addSearchWord);
@@ -47,34 +49,20 @@ function addSearchWord(){
     }
 }
 
-function storeOptions(){
-  var words = new Object(); // storageArea.set() method takes an object that contains all the items to be stored. This Object contains those.
-  
-  $("option").each(function(key,value){ // .each(index, element)
-    words[value.id] = value.text;
-    chrome.storage.sync.set(words, function(){console.log("Stored: "+value.text);});
-  });
+function storeOptions() {
+    var words = {};
+    $('option').each(function(idx, element) {
+        words[element.id] = element.text;
+    });
+    chrome.storage.sync.set({ words: words });
 }
 
 $("#removeButton").click(removeSearchWord);
 
 function removeSearchWord(){
   $("option:selected").each(function(key,value){
-    chrome.storage.sync.remove(value.id);
+    chrome.storage.sync.remove(value.id, function(items){console.log("removed: "+items);});
   });
   $("option:selected").remove();
   storeOptions();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
